@@ -43,14 +43,16 @@ Player.prototype.render = function(){
 };
 
 Player.prototype.update = function(){
-	Object.keys(keysDown).forEach(function(key){
-		var value = Number(key);
-		if(value == 37) { // left arrow
-			this.player.paddle.move(-4, 0);
-		} else if (value == 39) { // right arrow
-			this.player.paddle.move(4, 0);
-		} 
-	});
+	if(game.paused === false){
+		Object.keys(keysDown).forEach(function(key){
+			var value = Number(key);
+			if(value == 37) { // left arrow
+				this.player.paddle.move(-4, 0);
+			} else if (value == 39) { // right arrow
+				this.player.paddle.move(4, 0);
+			}
+		});
+	}
 };
 
 function Computer() {
@@ -79,6 +81,8 @@ function Ball(x, y) {
 	this.x_speed = 0;
 	this.y_speed = 3;
 	this.radius = 5;
+	this.paused_y_speed = 0;
+	this.paused_x_speed = 0;
 }
 
 Ball.prototype.render = function(){
@@ -94,6 +98,18 @@ Ball.prototype.reset = function(){
 	this.x_speed = 0;
 	this.y_speed = 3;
 	this.radius = 5;
+};
+
+Ball.prototype.pause = function(){
+	this.paused_x_speed = this.x_speed;
+	this.paused_y_speed = this.y_speed;
+	this.x_speed = 0;
+	this.y_speed = 0;
+};
+
+Ball.prototype.unpause = function(){
+	this.x_speed = this.paused_x_speed;
+	this.y_speed = this.paused_y_speed;
 };
 
 Ball.prototype.update = function(paddle1, paddle2){
@@ -224,10 +240,29 @@ var scoreboard = {
 	}
 }
 
+var game = {
+	
+	paused: false,
+
+	stateManager: function(){
+		$(document).keypress(function(e) {
+			if(e.which === 32 && game.paused === true){
+				// Unpause game
+				ball.unpause();
+				game.paused = false;
+			} else if(e.which === 32 && game.paused === false){
+				// Pause game
+				ball.pause();
+				game.paused = true;
+			}
+		});
+	}
+}
+
 // Onload Functions
 $(document).ready(function(){
 	canvas.init();
 	canvas.animateCanvas();
 	scoreboard.init();
-	// TODO: Add start/pause
+	game.stateManager();
 });
