@@ -1,6 +1,6 @@
 var	player = new Player(),
-		computer = new Computer(),
-		ball = new Ball(200, 300);
+	computer = new Computer(),
+	ball = new Ball(200, 300);
 
 function Paddle(x, y, width, height){
 	this.x = x;
@@ -20,7 +20,7 @@ Paddle.prototype.move = function(x, y){
 	this.x += x;
 	this.y += y;
 	this.x_speed = x;
-  this.y_speed = y;
+	this.y_speed = y;
 
 	// Prevent paddle from going out of bounds
 	if(this.x < 0){
@@ -79,10 +79,10 @@ function Ball(x, y) {
 	this.x = 200;
 	this.y = 300;
 	this.x_speed = 0;
-	this.y_speed = 3;
+	this.y_speed = 0;
 	this.radius = 5;
-	this.paused_y_speed = 0;
 	this.paused_x_speed = 0;
+	this.paused_y_speed = 3;
 }
 
 Ball.prototype.render = function(){
@@ -172,6 +172,9 @@ var canvas = {
 		canvasElement.height = this.height;
 		context = canvasElement.getContext('2d');
 		document.body.appendChild(canvasElement);
+
+		$('body').append('<div class="pauseScreen">');
+		$('.pauseScreen').text('Press spacebar to begin');
 	},
 
 	animateCanvas: function(){
@@ -185,6 +188,15 @@ var canvas = {
 		animationFrame(function(){ 
 			canvas.loop();
 		});
+	},
+
+	pauseScreen: function(){
+		if(game.paused === false){
+			$('.pauseScreen').hide();
+		} else{
+			$('.pauseScreen').text('Game Paused');
+			$('.pauseScreen').show();
+		}
 	},
 
 	update: function(){
@@ -242,18 +254,20 @@ var scoreboard = {
 
 var game = {
 	
-	paused: false,
+	paused: true,
 
 	stateManager: function(){
 		$(document).keypress(function(e) {
 			if(e.which === 32 && game.paused === true){
 				// Unpause game
-				ball.unpause();
 				game.paused = false;
+				canvas.pauseScreen();
+				ball.unpause();
 			} else if(e.which === 32 && game.paused === false){
 				// Pause game
-				ball.pause();
 				game.paused = true;
+				canvas.pauseScreen();
+				ball.pause();
 			}
 		});
 	}

@@ -13,3 +13,16 @@
 	font-size: x-large;
 	color: white;
 }
+
+.pauseScreen{
+	position: absolute;
+	top: 0px;
+	font-size: x-large;
+	color: white;
+	background: black;
+	z-index: 99;
+	width: 400px;
+	text-align: center;
+	padding-top: 295px;
+	padding-bottom: 295px;
+}
