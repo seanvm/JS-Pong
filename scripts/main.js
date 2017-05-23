@@ -81,7 +81,9 @@ function Ball(x, y) {
 	this.x_speed = 0;
 	this.y_speed = 0;
 	this.radius = 5;
-	this.paused_x_speed = 0;
+
+	// Start ball in random direction
+	this.paused_x_speed = (Math.floor(Math.random() * 10) - 5);
 	this.paused_y_speed = 3;
 }
 
@@ -95,7 +97,7 @@ Ball.prototype.render = function(){
 Ball.prototype.reset = function(){
 	this.x = 200;
 	this.y = 300;
-	this.x_speed = 0;
+	this.x_speed = (Math.floor(Math.random() * 10) - 5);
 	this.y_speed = 3;
 	this.radius = 5;
 };
