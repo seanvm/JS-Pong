@@ -67,9 +67,9 @@ Computer.prototype.update = function(ball){
 	
 	// Track ball
 	if((paddle_position - ball_position) > 4){
-		this.paddle.move(-5, 0);
+		this.paddle.move(-6, 0);
 	} else if((paddle_position - ball_position) < -4){
-		this.paddle.move(5, 0);
+		this.paddle.move(6, 0);
 	}
 };
 
