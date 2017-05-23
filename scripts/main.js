@@ -114,7 +114,7 @@ Ball.prototype.update = function(paddle1, paddle2){
 
 	// Reset ball after point has been scored
 	if(this.y < 0 || this.y > 600){
-		scoreboard.updateScore();
+		scoreboard.updateScore(this.y);
 		this.reset();
 	}
 
@@ -152,8 +152,8 @@ var canvas = {
 
 	init: function(){
 		var canvasElement = document.createElement('canvas');
-		canvasElement.width = canvas.width;
-		canvasElement.height = canvas.height;
+		canvasElement.width = this.width;
+		canvasElement.height = this.height;
 		context = canvasElement.getContext('2d');
 		document.body.appendChild(canvasElement);
 	},
@@ -179,23 +179,48 @@ var canvas = {
 
 	render: function(){
 		context.fillStyle = "#000000";
-		context.fillRect(0, 0, canvas.width, canvas.height);
+		context.fillRect(0, 0, this.width, this.height);
+		context.beginPath();
+		context.setLineDash([5, 15]);
+		context.moveTo(0, 300);
+		context.lineTo(400, 300);
+		context.strokeStyle = '#FFFFFF';
+		context.stroke();
+		
 		player.render();
 		computer.render();
 		ball.render();
 	},
 
 	loop: function(){
-		canvas.update();
-		canvas.render();
-		canvas.animateCanvas();
+		this.update();
+		this.render();
+		this.animateCanvas();
 	},
 }
 
 var scoreboard = {
 
-	updateScore: function(){
+	playerScore: 0,
+	computerScore: 0,
 
+	init: function(){
+		$('body').append('<div class="computerScore">');
+		$('body').append('<div class="playerScore">');
+		$('.playerScore').text(this.playerScore);
+		$('.computerScore').text(this.computerScore);
+	},
+
+	updateScore: function(ball_position){
+		if(ball_position > 600){
+			// Computer scored a point
+			this.computerScore += 1;
+			$('.computerScore').text(this.computerScore);
+		} else {
+			// Player scored a point
+			this.playerScore += 1;
+			$('.playerScore').text(this.playerScore);
+		}
 	}
 }
 
@@ -203,4 +228,6 @@ var scoreboard = {
 $(document).ready(function(){
 	canvas.init();
 	canvas.animateCanvas();
+	scoreboard.init();
+	// TODO: Add start/pause
 });

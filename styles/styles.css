@@ -1,0 +1,15 @@
+.computerScore{
+	position: absolute;
+	top: 260px;
+	left: 370px;
+	font-size: x-large;
+	color: white;
+}
+
+.playerScore{
+	position: absolute;
+	top: 325px;
+	left: 370px;
+	font-size: x-large;
+	color: white;
+}
